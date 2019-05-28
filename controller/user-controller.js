@@ -1,12 +1,15 @@
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var config = require('../config/config');
- 
+
+
 function createToken(user) {
     return jwt.sign({ id: user.id, email: user.email }, config.jwtSecret, {
         expiresIn: 200 // 86400 expires in 24 hours
       });
 }
+
+
  
 exports.registerUser = (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.userName || !req.body.fullName || !req.body.gender,!req.body.operator) {
@@ -33,11 +36,11 @@ exports.registerUser = (req, res) => {
 };
  
 exports.loginUser = (req, res) => {
-    if (!req.body.email || !req.body.password) {
+    if (!req.body.userName || !req.body.password) {
         return res.status(400).send({ 'msg': 'You need to send email and password' });
     }
  
-    User.findOne({ email: req.body.email }, (err, user) => {
+    User.findOne({ userName: req.body.userName }, (err, user) => {
         if (err) {
             return res.status(400).send({ 'msg': err });
         }
@@ -68,3 +71,6 @@ exports.loginUser = (req, res) => {
         });
     });
     };
+
+
+   
